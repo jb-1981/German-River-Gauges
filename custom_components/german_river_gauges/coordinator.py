@@ -21,8 +21,4 @@ class RiverDataCoordinator(DataUpdateCoordinator):
 
     async def _async_update_data(self):
         """Fetch data from API."""
-        try:
-            return await self.api.fetch_all()
-        except Exception as err:
-            _LOGGER.error("Error fetching river data: %s", err)
-            return {}
+        return await self.api.fetch_all()
