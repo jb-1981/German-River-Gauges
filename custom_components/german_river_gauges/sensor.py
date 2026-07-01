@@ -13,14 +13,14 @@ _LOGGER = logging.getLogger(__name__)
 
 SENSOR_TYPES = {
     "water_level": ("Wasserstand", "mdi:water"),
-    "flow": ("Durchfluss", "mdi:waves"),
-    "temperature": ("Temperatur", "mdi:thermometer"),
-    "trend": ("Trend", "mdi:trending-up"),
-    "warning": ("Warnstufe", "mdi:alert"),
 }
 
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities):
+async def async_setup_entry(
+    hass: HomeAssistant,
+    entry: ConfigEntry,
+    async_add_entities,
+):
     """Set up sensors."""
 
     coordinator = hass.data.get(DOMAIN, {}).get(entry.entry_id)
@@ -43,7 +43,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
 
 
 class RiverSensor(CoordinatorEntity, SensorEntity):
-    """River sensor."""
+    """Single river sensor."""
 
     def __init__(self, coordinator, river: str, sensor_type: str):
         super().__init__(coordinator)
@@ -51,17 +51,16 @@ class RiverSensor(CoordinatorEntity, SensorEntity):
         self.river = river
         self.sensor_type = sensor_type
 
-        name, icon = SENSOR_TYPES[sensor_type]
-
-        self._attr_name = f"{river.capitalize()} {name}"
+        self._attr_name = f"{river.capitalize()} Wasserstand"
         self._attr_unique_id = f"{DOMAIN}_{river}_{sensor_type}"
-        self._attr_icon = icon
+        self._attr_icon = "mdi:water"
 
     @property
     def native_value(self):
+        """Return value."""
         data = self.coordinator.data or {}
         river_data = data.get(self.river, {})
-        return river_data.get(self.sensor_type)
+        return river_data.get("water_level")
 
     @property
     def available(self):
