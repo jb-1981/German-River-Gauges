@@ -7,12 +7,12 @@ from .coordinator import RiverDataCoordinator
 
 
 async def async_setup(hass: HomeAssistant, config: dict):
-    """Set up via YAML (not used)."""
+    """YAML setup not used."""
     return True
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
-    """Set up integration from a config entry."""
+    """Set up integration from config entry."""
 
     api = PegelOnlineAPI()
     coordinator = RiverDataCoordinator(hass, api)
