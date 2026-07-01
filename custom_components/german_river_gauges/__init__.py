@@ -1,3 +1,5 @@
+import logging
+
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
@@ -5,6 +7,7 @@ from .const import DOMAIN
 from .api import PegelOnlineAPI
 from .coordinator import RiverDataCoordinator
 
+_LOGGER = logging.getLogger(__name__)
 
 PLATFORMS = ["sensor"]
 
@@ -24,14 +27,17 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     hass.data.setdefault(DOMAIN, {})
     hass.data[DOMAIN][entry.entry_id] = coordinator
 
-    # 🔥 WICHTIG: Sensor Plattform aktivieren
+    # 🔥 WICHTIG: Sensor-Plattform wirklich laden
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+
+    _LOGGER.info("German River Gauges loaded successfully")
 
     return True
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
     """Unload integration."""
+
     hass.data[DOMAIN].pop(entry.entry_id, None)
 
     await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
