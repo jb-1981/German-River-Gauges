@@ -10,7 +10,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     VERSION = 1
 
     async def async_step_user(self, user_input=None):
-        """User configuration step."""
+        """User step."""
 
         if user_input is not None:
             return self.async_create_entry(
