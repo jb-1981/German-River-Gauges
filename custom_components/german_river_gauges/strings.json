@@ -1,0 +1,13 @@
+{
+  "title": "German River Gauges",
+  "config": {
+    "step": {
+      "user": {
+        "title": "River Selection",
+        "data": {
+          "rivers": "Rivers"
+        }
+      }
+    }
+  }
+}
