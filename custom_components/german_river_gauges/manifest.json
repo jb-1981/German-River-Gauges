@@ -1,0 +1,12 @@
+{
+  "domain": "german_river_gauges",
+  "name": "German River Gauges",
+  "version": "0.1.0",
+  "documentation": "https://github.com/jb-1981/German-River-Gauges",
+  "issue_tracker": "https://github.com/jb-1981/German-River-Gauges/issues",
+  "dependencies": [],
+  "codeowners": [],
+  "requirements": [],
+  "config_flow": true,
+  "iot_class": "cloud_polling"
+}
