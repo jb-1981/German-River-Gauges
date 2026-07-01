@@ -1,0 +1,13 @@
+{
+  "title": "Deutsche Flusspegel",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Flüsse auswählen",
+        "data": {
+          "rivers": "Flüsse"
+        }
+      }
+    }
+  }
+}
