@@ -10,7 +10,8 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     VERSION = 1
 
     async def async_step_user(self, user_input=None):
-        """First step of config flow."""
+        """User configuration step."""
+
         if user_input is not None:
             return self.async_create_entry(
                 title="German River Gauges",
@@ -19,10 +20,9 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
         schema = vol.Schema(
             {
-                vol.Required(
-                    CONF_RIVERS,
-                    default=list(RIVERS.keys()),
-                ): list,
+                vol.Required(CONF_RIVERS, default=list(RIVERS.keys())): vol.In(
+                    list(RIVERS.keys())
+                )
             }
         )
 
