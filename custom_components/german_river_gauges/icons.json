@@ -1,0 +1,7 @@
+{
+  "water_level": "mdi:water",
+  "flow": "mdi:waves",
+  "temperature": "mdi:thermometer",
+  "trend": "mdi:trending-up",
+  "warning": "mdi:alert"
+}
