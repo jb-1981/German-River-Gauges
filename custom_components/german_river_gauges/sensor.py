@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import logging
+
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -7,6 +9,7 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN
 
+_LOGGER = logging.getLogger(__name__)
 
 SENSOR_TYPES = {
     "water_level": ("Wasserstand", "mdi:water"),
@@ -18,12 +21,19 @@ SENSOR_TYPES = {
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities):
-    """Set up sensors from a config entry."""
-    coordinator = hass.data[DOMAIN][entry.entry_id]
+    """Set up sensors."""
+
+    coordinator = hass.data.get(DOMAIN, {}).get(entry.entry_id)
+
+    if not coordinator:
+        _LOGGER.error("Coordinator not found")
+        return
 
     entities = []
 
-    for river in coordinator.data.keys():
+    data = coordinator.data or {}
+
+    for river in data.keys():
         for sensor_type in SENSOR_TYPES:
             entities.append(
                 RiverSensor(coordinator, river, sensor_type)
@@ -33,13 +43,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
 
 
 class RiverSensor(CoordinatorEntity, SensorEntity):
-    """Representation of a river gauge sensor."""
+    """River sensor."""
 
     def __init__(self, coordinator, river: str, sensor_type: str):
-        """Initialize sensor."""
         super().__init__(coordinator)
 
-        self.coordinator = coordinator
         self.river = river
         self.sensor_type = sensor_type
 
@@ -51,21 +59,10 @@ class RiverSensor(CoordinatorEntity, SensorEntity):
 
     @property
     def native_value(self):
-        """Return sensor value."""
         data = self.coordinator.data or {}
         river_data = data.get(self.river, {})
-
         return river_data.get(self.sensor_type)
 
     @property
-    def extra_state_attributes(self):
-        """Return attributes."""
-        return {
-            "river": self.river,
-            "type": self.sensor_type,
-        }
-
-    @property
     def available(self):
-        """Return availability."""
         return self.coordinator.data is not None
