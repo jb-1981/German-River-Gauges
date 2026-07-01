@@ -12,10 +12,6 @@ _LOGGER = logging.getLogger(__name__)
 PLATFORMS = ["sensor"]
 
 
-async def async_setup(hass: HomeAssistant, config: dict):
-    return True
-
-
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     """Set up integration."""
 
@@ -27,19 +23,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     hass.data.setdefault(DOMAIN, {})
     hass.data[DOMAIN][entry.entry_id] = coordinator
 
-    # 🔥 WICHTIG: Sensor-Plattform wirklich laden
+    # Sensor Plattform laden
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
-    _LOGGER.info("German River Gauges loaded successfully")
+    _LOGGER.warning("German River Gauges loaded")
 
     return True
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
-    """Unload integration."""
-
     hass.data[DOMAIN].pop(entry.entry_id, None)
-
-    await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
-
     return True
